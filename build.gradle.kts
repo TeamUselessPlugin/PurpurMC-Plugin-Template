@@ -46,13 +46,14 @@ tasks {
 
         doLast {
             copy {
+                val archiveFileName = "${project.name}-dev.jar"
+
                 from(archiveFile)
-                rename { "${project.name}-dev.jar" }
+                rename { archiveFileName }
 
-//                val newPluginFileLocation = File("\\\\192.168.123.107\\Users\\User\\Desktop\\DEV\\plugins") // DevServer
-                val newPluginFileLocation = File(rootDir, ".dev/plugins") // Local
+                val newPluginFileLocation = File("\\\\192.168.123.107\\Users\\User\\Desktop\\DEV\\plugins") // DevServer
 
-                if (File(newPluginFileLocation, archiveFileName.get()).exists()) {
+                if (File(newPluginFileLocation, archiveFileName).exists()) {
                     into(File(newPluginFileLocation, "update"))
                     File(newPluginFileLocation, "update/RELOAD").delete()
                 } else {
