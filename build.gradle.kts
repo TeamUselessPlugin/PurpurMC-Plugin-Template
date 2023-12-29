@@ -29,8 +29,9 @@ dependencies {
 
 tasks {
     processResources {
+        filteringCharset = "UTF-8"
+
         filesMatching("**/*.yml") {
-            filteringCharset = "UTF-8"
             expand(project.properties)
         }
     }
