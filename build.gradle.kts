@@ -22,7 +22,6 @@ dependencies {
     /* Essentials Dependency */
     implementation(kotlin("stdlib")) // Kotlin Standard Library : Apache-2.0 License
     implementation(kotlin("reflect")) // Kotlin Reflection : Apache-2.0 License
-//    implementation("org.jetbrains", "annotations", "24.1.0") // Annotations : Apache-2.0 License
     /* Essentials Dependency */
 
 //    compileOnly(fileTree(mapOf("dir" to "libs/compileOnly", "include" to listOf("*.jar")))) // Load all jars in libs folder (Local Libraries)
