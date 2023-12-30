@@ -19,12 +19,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.purpurmc.purpur", "purpur-api", "${targetMC}-R0.1-SNAPSHOT") // PurpurMC API
-    compileOnly("dev.jorel", "commandapi-bukkit-core", "9.3.0") // CommandAPI Dev Only
+    compileOnly("org.purpurmc.purpur", "purpur-api", "${targetMC}-R0.1-SNAPSHOT") // PurpurMC API : MIT License
+    compileOnly("dev.jorel", "commandapi-bukkit-core", "9.3.0") // CommandAPI Dev Only : MIT License
 //    compileOnly(fileTree(mapOf("dir" to "libs/compileOnly", "include" to listOf("*.jar")))) // Load all jars in libs folder (Local Libraries)
 
 //    implementation(fileTree(mapOf("dir" to "libs/implementation", "include" to listOf("*.jar")))) // Load all jars in libs folder (Local Libraries)
-    implementation("dev.jorel", "commandapi-bukkit-shade", "9.3.0") // CommandAPI Shade
+    implementation("dev.jorel", "commandapi-bukkit-shade", "9.3.0") // CommandAPI Shade : MIT License
 }
 
 tasks {
