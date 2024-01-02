@@ -83,6 +83,7 @@ tasks {
                 rename { archiveFileName }
 
                 val newPluginFileLocation = File("\\\\192.168.123.107\\Users\\User\\Desktop\\DEV\\plugins") // DevServer
+//                val newPluginFileLocation = File(rootDir, ".dev/plugins") // Local
 
                 if (File(newPluginFileLocation, archiveFileName).exists()) {
                     into(File(newPluginFileLocation, "update"))
