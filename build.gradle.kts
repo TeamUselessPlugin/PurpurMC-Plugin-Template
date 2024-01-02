@@ -67,7 +67,7 @@ tasks {
         file("build/resources")
     )
 
-    register<ShadowJar>("purpurJar") {
+    register<ShadowJar>("paperJar") {
         archiveBaseName.set(project.name)
         archiveVersion.set(version)
         archiveClassifier.set("")
