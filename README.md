@@ -1,10 +1,10 @@
-# PurpurMC Plugin Template
+# plugin-template
 
 ---
-> PurpurMC Sample Plugin (1.20.4 ~)
+> Plugin Template (1.20.4 ~)
 ---
 
-    PurpurMC Plugin Template
+    plugin-template
     Copyright (C) 2024 TeamUselessPlugin
 
     This program is free software: you can redistribute it and/or modify

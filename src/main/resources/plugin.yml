@@ -1,6 +1,11 @@
 name: $name
 version: $version
 main: $main
-api-version: $targetMC
+api-version: $targetAPI
 authors: [ TeamUselessPlugin ]
 website: https://github.com/TeamUselessPlugin/PurpurMC-Plugin-Template
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib:1.9.22
+  - org.jetbrains.kotlin:kotlin-reflect:1.9.22
+  - org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3
+  - dev.jorel:commandapi-bukkit-shade:9.3.0
