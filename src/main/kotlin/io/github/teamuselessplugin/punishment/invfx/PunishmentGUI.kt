@@ -354,38 +354,42 @@ class PunishmentGUI {
                                 }
 
                                 onClick {
-                                    if (isOnline) {
-                                        BlockEvents.tracking[sender.uniqueId] = true
-                                        sender.sendMessage(Component.text("§a${playerOffline.name}님에 대한 추적이 설정되었습니다."))
-                                        sender.sendMessage(Component.text("§a추적을 종료하려면 ")
-                                            .append(Component.text("/추적종료")
-                                                .clickEvent(ClickEvent.runCommand("/추적종료"))
-                                                .hoverEvent(HoverEvent.showText(Component.text("§7클릭하여 추적을 종료합니다."))))
-                                            .append(Component.text("§a를 입력하세요.")))
-
-                                        BlockEvents.oldLoc[sender.uniqueId] = sender.location
-                                        BlockEvents.oldGameMode[sender.uniqueId] = sender.gameMode
-                                        BlockEvents.trackingPlayer[sender.uniqueId] = playerOffline.uniqueId
-
-                                        sender.gameMode = GameMode.SPECTATOR
-                                        sender.spectatorTarget = playerOnline
-                                        sender.playSound(sender.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 2f)
-                                        sender.closeInventory()
-
-                                        HeartbeatScope().launch {
-                                            val glow = GlowPlayer(playerOnline).apply { addWatcher(sender) }
-                                            while (BlockEvents.tracking[sender.uniqueId] == true) {
-                                                if (sender.location.distance(playerOnline?.location!!) > Main.conf?.getInt("trackingDistance")!!) {
-                                                    sender.teleport(playerOnline.location)
-                                                }
-                                                glow.show()
-                                                sender.sendActionBar(Component.text("§f${playerOffline.name}님의 위치: X : §c${playerOnline.location.blockX}§f, Y : §c${playerOnline.location.blockY}§f, Z : §c${playerOnline.location.blockZ} §f[거리 : §c${Math.round(sender.location.distance(playerOnline.location))}m§f]"))
-                                                delay(50L)
-                                            }
-                                            glow.hide()
-                                        }
+                                    if (BlockEvents.tracking[sender.uniqueId] == true) {
+                                        sender.performCommand("punishment-tracking-end")
                                     } else {
-                                        sender.sendMessage(errorIsOfflinePlayer)
+                                        if (isOnline) {
+                                            BlockEvents.tracking[sender.uniqueId] = true
+                                            sender.sendMessage(Component.text("§a${playerOffline.name}님에 대한 추적이 설정되었습니다."))
+                                            sender.sendMessage(Component.text("§a추적을 종료하려면 ")
+                                                .append(Component.text("/추적종료")
+                                                    .clickEvent(ClickEvent.runCommand("/추적종료"))
+                                                    .hoverEvent(HoverEvent.showText(Component.text("§7클릭하여 추적을 종료합니다."))))
+                                                .append(Component.text("§a를 입력하세요.")))
+
+                                            BlockEvents.oldLoc[sender.uniqueId] = sender.location
+                                            BlockEvents.oldGameMode[sender.uniqueId] = sender.gameMode
+                                            BlockEvents.trackingPlayer[sender.uniqueId] = playerOffline.uniqueId
+
+                                            sender.gameMode = GameMode.SPECTATOR
+                                            sender.spectatorTarget = playerOnline
+                                            sender.playSound(sender.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 2f)
+                                            sender.closeInventory()
+
+                                            HeartbeatScope().launch {
+                                                val glow = GlowPlayer(playerOnline).apply { addWatcher(sender) }
+                                                while (BlockEvents.tracking[sender.uniqueId] == true) {
+                                                    if (sender.location.distance(playerOnline?.location!!) > Main.conf?.getInt("trackingDistance")!!) {
+                                                        sender.teleport(playerOnline.location)
+                                                    }
+                                                    glow.show()
+                                                    sender.sendActionBar(Component.text("§f${playerOffline.name}님의 위치: X : §c${playerOnline.location.blockX}§f, Y : §c${playerOnline.location.blockY}§f, Z : §c${playerOnline.location.blockZ} §f[거리 : §c${Math.round(sender.location.distance(playerOnline.location))}m§f]"))
+                                                    delay(50L)
+                                                }
+                                                glow.hide()
+                                            }
+                                        } else {
+                                            sender.sendMessage(errorIsOfflinePlayer)
+                                        }
                                     }
                                 }
                             }
@@ -576,38 +580,42 @@ class PunishmentGUI {
                             }
 
                             onClick {
-                                if (isOnline) {
-                                    BlockEvents.tracking[sender.uniqueId] = true
-                                    sender.sendMessage(Component.text("§a${playerOffline.name}님에 대한 추적이 설정되었습니다."))
-                                    sender.sendMessage(Component.text("§a추적을 종료하려면 ")
-                                        .append(Component.text("/추적종료")
-                                            .clickEvent(ClickEvent.runCommand("/추적종료"))
-                                            .hoverEvent(HoverEvent.showText(Component.text("§7클릭하여 추적을 종료합니다."))))
-                                        .append(Component.text("§a를 입력하세요.")))
-
-                                    BlockEvents.oldLoc[sender.uniqueId] = sender.location
-                                    BlockEvents.oldGameMode[sender.uniqueId] = sender.gameMode
-                                    BlockEvents.trackingPlayer[sender.uniqueId] = playerOffline.uniqueId
-
-                                    sender.gameMode = GameMode.SPECTATOR
-                                    sender.spectatorTarget = playerOnline
-                                    sender.playSound(sender.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 2f)
-                                    sender.closeInventory()
-
-                                    HeartbeatScope().launch {
-                                        val glow = GlowPlayer(playerOnline).apply { addWatcher(sender) }
-                                        while (BlockEvents.tracking[sender.uniqueId] == true) {
-                                            if (sender.location.distance(playerOnline?.location!!) > Main.conf?.getInt("trackingDistance")!!) {
-                                                sender.teleport(playerOnline.location)
-                                            }
-                                            glow.show()
-                                            sender.sendActionBar(Component.text("§f${playerOffline.name}님의 위치: X : §c${playerOnline.location.blockX}§f, Y : §c${playerOnline.location.blockY}§f, Z : §c${playerOnline.location.blockZ} §f[거리 : §c${Math.round(sender.location.distance(playerOnline.location))}m§f]"))
-                                            delay(50L)
-                                        }
-                                        glow.hide()
-                                    }
+                                if (BlockEvents.tracking[sender.uniqueId] == true) {
+                                    sender.performCommand("punishment-tracking-end")
                                 } else {
-                                    sender.sendMessage(errorIsOfflinePlayer)
+                                    if (isOnline) {
+                                        BlockEvents.tracking[sender.uniqueId] = true
+                                        sender.sendMessage(Component.text("§a${playerOffline.name}님에 대한 추적이 설정되었습니다."))
+                                        sender.sendMessage(Component.text("§a추적을 종료하려면 ")
+                                            .append(Component.text("/추적종료")
+                                                .clickEvent(ClickEvent.runCommand("/추적종료"))
+                                                .hoverEvent(HoverEvent.showText(Component.text("§7클릭하여 추적을 종료합니다."))))
+                                            .append(Component.text("§a를 입력하세요.")))
+
+                                        BlockEvents.oldLoc[sender.uniqueId] = sender.location
+                                        BlockEvents.oldGameMode[sender.uniqueId] = sender.gameMode
+                                        BlockEvents.trackingPlayer[sender.uniqueId] = playerOffline.uniqueId
+
+                                        sender.gameMode = GameMode.SPECTATOR
+                                        sender.spectatorTarget = playerOnline
+                                        sender.playSound(sender.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 2f)
+                                        sender.closeInventory()
+
+                                        HeartbeatScope().launch {
+                                            val glow = GlowPlayer(playerOnline).apply { addWatcher(sender) }
+                                            while (BlockEvents.tracking[sender.uniqueId] == true) {
+                                                if (sender.location.distance(playerOnline?.location!!) > Main.conf?.getInt("trackingDistance")!!) {
+                                                    sender.teleport(playerOnline.location)
+                                                }
+                                                glow.show()
+                                                sender.sendActionBar(Component.text("§f${playerOffline.name}님의 위치: X : §c${playerOnline.location.blockX}§f, Y : §c${playerOnline.location.blockY}§f, Z : §c${playerOnline.location.blockZ} §f[거리 : §c${Math.round(sender.location.distance(playerOnline.location))}m§f]"))
+                                                delay(50L)
+                                            }
+                                            glow.hide()
+                                        }
+                                    } else {
+                                        sender.sendMessage(errorIsOfflinePlayer)
+                                    }
                                 }
                             }
                         }
