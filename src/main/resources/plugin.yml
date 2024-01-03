@@ -3,9 +3,24 @@ version: $version
 main: $main
 api-version: $targetAPI
 authors: [ TeamUselessPlugin ]
-website: https://github.com/TeamUselessPlugin/PurpurMC-Plugin-Template
+softdepend: [ LiteBans ]
+depend: [ ProtocolLib ]
+website: https://github.com/TeamUselessPlugin/punishment-helper
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib:1.9.22
   - org.jetbrains.kotlin:kotlin-reflect:1.9.22
   - org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3
   - dev.jorel:commandapi-bukkit-shade:9.3.0
+  - io.github.monun:invfx-core:3.3.2
+  - io.github.monun:heartbeat-coroutines:0.0.5
+
+permissions:
+  punishment.gui:
+    description: 처벌 GUI를 열 수 있습니다.
+    default: op
+  punishment.stick:
+    description: 막대기를 이용해 처벌 GUI를 사용할 수 있습니다.
+    default: op
+  punishment.bypass:
+    description: 처벌을 우회할 수 있습니다.
+    default: op

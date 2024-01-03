@@ -16,6 +16,8 @@ kotlin {
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://jitpack.io")
+    maven("https://repo.dmulloy2.net/repository/public/")
 }
 
 dependencies {
@@ -28,28 +30,10 @@ dependencies {
     compileOnly(fileTree(mapOf("dir" to "libs/compileOnly", "include" to listOf("*.jar")))) // Load all jars in libs folder (Local Libraries)
     compileOnly("io.papermc.paper", "paper-api", "${targetPaperAPI}-R0.1-SNAPSHOT") // PaperMC API : MIT License
     compileOnly("dev.jorel", "commandapi-bukkit-core", "9.3.0") // CommandAPI Dev Only : MIT License
-    /**
-     * compileOnly("io.github.monun", "heartbeat-coroutines", "<latest_version>") // Heartbeat Coroutine : GPL-3.0 License
-     * Please Add this to your README.md if you use this library
-     *
-     * > N. heartbeat-coroutines - `GPL-3.0 License`
-     * >    * https://github.com/monun/heartbeat-coroutines
-     * >    * https://github.com/monun/heartbeat-coroutines/blob/master/LICENSE.md
-     *
-     * And Add this to your plugin.yml (libraries)
-     * - io.github.monun:heartbeat-coroutines:<latest_version>
-     */
-    /**
-     * compileOnly("io.github.monun", "invfx-api", "<latest_version>") // InvFX API : GPL-3.0 License
-     * Please Add this to your README.md if you use this library
-     *
-     * > N. invfx - `GPL-3.0 License`
-     * >    * https://github.com/monun/invfx
-     * >    * https://github.com/monun/invfx/blob/master/LICENSE.md
-     *
-     * And Add this to your plugin.yml (libraries)
-     * - io.github.monun:invfx-core:<latest_version>
-     */
+    compileOnly("com.gitlab.ruany", "LiteBansAPI", "0.4.1") // LiteBans API : MIT License
+    compileOnly("io.github.monun", "heartbeat-coroutines", "0.0.5") // Heartbeat Coroutine : GPL-3.0 License
+    compileOnly("io.github.monun", "invfx-api", "3.3.2") // InvFX API : GPL-3.0 License
+    compileOnly("com.comphenix.protocol", "ProtocolLib", "5.2.0-20231209.220838-1") // ProtocolLib : GPL-2.0 License
 
     implementation(fileTree(mapOf("dir" to "libs/implementation", "include" to listOf("*.jar")))) // Load all jars in libs folder (Local Libraries)
 }
@@ -67,7 +51,7 @@ tasks {
         file("build/resources")
     )
 
-    register<ShadowJar>("purpurJar") {
+    register<ShadowJar>("paperJar") {
         archiveBaseName.set(project.name)
         archiveVersion.set(version)
         archiveClassifier.set("")

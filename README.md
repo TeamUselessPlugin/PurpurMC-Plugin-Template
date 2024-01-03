@@ -1,10 +1,10 @@
-# plugin-template
+# Punishment Helper
 
 ---
-> Plugin Template (1.20.4 ~)
+> Liteban을 이용하는 GUI 형식의 처벌 시스템 (1.20.4 ~)
 ---
 
-    plugin-template
+    Punishment Helper
     Copyright (C) 2024 TeamUselessPlugin
 
     This program is free software: you can redistribute it and/or modify
@@ -28,3 +28,12 @@
 > 2. server-script - `MIT License`
 >    * https://github.com/monun/server-script
 >    * https://github.com/monun/server-script/blob/master/LICENSE
+> 3. LitebanAPI - `MIT License`
+>    * https://gitlab.com/ruany/LiteBansAPI
+>    * https://gitlab.com/ruany/LiteBansAPI/-/blob/master/LICENSE
+> 4. invfx - `GPL-3.0 License`
+>    * https://github.com/monun/invfx
+>    * https://github.com/monun/invfx/blob/master/LICENSE.md
+> 5. heartbeat-coroutines - `GPL-3.0 License`
+>    * https://github.com/monun/heartbeat-coroutines
+>    * https://github.com/monun/heartbeat-coroutines/blob/master/LICENSE.md
