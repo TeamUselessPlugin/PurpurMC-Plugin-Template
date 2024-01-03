@@ -335,7 +335,7 @@ class PunishmentGUI {
 
                             // Tracking Player Button
                             slot(1, 4) {
-                                if (BlockEvents.tracking[playerOffline.uniqueId] == true) {
+                                if (BlockEvents.tracking[sender.uniqueId] == true) {
                                     item = ItemStack(Material.COMPASS).apply {
                                         itemMeta = itemMeta.apply {
                                             displayName(Component.text("§c플레이어 추적 §a(설정됨)"))
@@ -557,7 +557,7 @@ class PunishmentGUI {
 
                         // Tracking Player Button
                         slot(1, 4) {
-                            if (BlockEvents.tracking[playerOffline.uniqueId] == true) {
+                            if (BlockEvents.tracking[sender.uniqueId] == true) {
                                 item = ItemStack(Material.COMPASS).apply {
                                     itemMeta = itemMeta.apply {
                                         displayName(Component.text("§c플레이어 추적 §a(설정됨)"))
