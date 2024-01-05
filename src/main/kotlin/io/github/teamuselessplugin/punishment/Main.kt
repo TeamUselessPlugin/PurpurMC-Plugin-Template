@@ -5,6 +5,7 @@ import dev.jorel.commandapi.CommandAPIBukkitConfig
 import io.github.kill00.configapi.cfg
 import io.github.teamuselessplugin.punishment.commands.Punishment
 import io.github.teamuselessplugin.punishment.events.BlockEvents
+import io.github.teamuselessplugin.punishment.events.Events
 import io.github.teamuselessplugin.punishment.events.StickFinderEvent
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.plugin.java.JavaPlugin
@@ -36,6 +37,7 @@ class Main : JavaPlugin() {
         Punishment().register()
 
         // 이벤트 등록
+        server.pluginManager.registerEvents(Events(), this)
         server.pluginManager.registerEvents(BlockEvents(), this)
         server.pluginManager.registerEvents(StickFinderEvent(), this)
     }

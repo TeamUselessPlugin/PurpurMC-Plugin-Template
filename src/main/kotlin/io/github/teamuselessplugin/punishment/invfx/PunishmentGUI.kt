@@ -6,7 +6,7 @@ import io.github.monun.invfx.frame.InvFrame
 import io.github.monun.invfx.openFrame
 import io.github.teamuselessplugin.punishment.Main
 import io.github.teamuselessplugin.punishment.events.BlockEvents
-import io.github.teamuselessplugin.punishment.protocol.GlowPlayer
+import io.github.teamuselessplugin.punishment.packet.GlowPlayer
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import litebans.api.Database
@@ -287,7 +287,7 @@ class PunishmentGUI {
                                 }
 
                                 onClick {
-                                    sender.openFrame(template(sender, targetUUID, PunishmentType.BAN, PluginType.LITEBANS)!!)
+                                    sender.openFrame(template(sender, targetUUID, PunishmentType.BAN, PluginType.LITEBANS))
                                 }
                             }
 
@@ -301,7 +301,7 @@ class PunishmentGUI {
                                 }
 
                                 onClick {
-                                    sender.openFrame(template(sender, targetUUID, PunishmentType.KICK, PluginType.LITEBANS)!!)
+                                    sender.openFrame(template(sender, targetUUID, PunishmentType.KICK, PluginType.LITEBANS))
                                 }
                             }
 
@@ -315,7 +315,7 @@ class PunishmentGUI {
                                 }
 
                                 onClick {
-                                    sender.openFrame(template(sender, targetUUID, PunishmentType.MUTE, PluginType.LITEBANS)!!)
+                                    sender.openFrame(template(sender, targetUUID, PunishmentType.MUTE, PluginType.LITEBANS))
                                 }
                             }
 
@@ -329,7 +329,7 @@ class PunishmentGUI {
                                 }
 
                                 onClick {
-                                    sender.openFrame(template(sender, targetUUID, PunishmentType.WARN, PluginType.LITEBANS)!!)
+                                    sender.openFrame(template(sender, targetUUID, PunishmentType.WARN, PluginType.LITEBANS))
                                 }
                             }
 
@@ -524,7 +524,7 @@ class PunishmentGUI {
                                 }
 
                                 onClick {
-                                    sender.openFrame(template(sender, targetUUID, PunishmentType.BAN, PluginType.VANILLA)!!)
+                                    sender.openFrame(template(sender, targetUUID, PunishmentType.BAN, PluginType.VANILLA))
                                 }
                             } else {
                                 item = ItemStack(Material.BARRIER).apply {
@@ -555,7 +555,7 @@ class PunishmentGUI {
                             }
 
                             onClick {
-                                sender.openFrame(template(sender, targetUUID, PunishmentType.KICK, PluginType.VANILLA)!!)
+                                sender.openFrame(template(sender, targetUUID, PunishmentType.KICK, PluginType.VANILLA))
                             }
                         }
 
@@ -704,34 +704,111 @@ class PunishmentGUI {
         }
     }
 
-    private fun template(sender: Player, targetUUID: UUID, punishmentType: PunishmentType, pluginType: PluginType): InvFrame? {
-        val playerOffline: OfflinePlayer = targetUUID.let { sender.server.getOfflinePlayer(it) }
-        val isOnline = playerOffline.isOnline
-        var playerOnline: Player? = null
-        if (isOnline) {
-            playerOnline = playerOffline.player
-        }
+    private fun template(sender: Player, targetUUID: UUID, punishmentType: PunishmentType, pluginType: PluginType): InvFrame {
+        val templateKeys = Main.template?.getConfigurationSection("templates")?.getKeys(false)?.toList()
 
-        when(pluginType) {
+        return frame((templateKeys?.size?.div(9) ?: 0) + 1, Component.text("Select Punishment Template")) {
+            templateKeys?.forEachIndexed { index, it ->
+                val material = Main.template?.getString("templates.$it.ItemStack.Material")?.uppercase()?.replace(" ", "_") ?: "PAPER"
+
+                slot(index % 9, index / 9) {
+                    item = ItemStack(Material.valueOf(material)).apply {
+                        itemMeta = itemMeta.apply {
+                            displayName(Component.text(Main.template?.getString("templates.$it.ItemStack.displayName").toString()
+                                .replace("&", "§")))
+                            lore(Main.template?.getStringList("templates.$it.ItemStack.lore")?.map { lore ->
+                                Component.text(lore.replace("&", "§"))
+                            })
+
+                            if (Main.template?.getBoolean("templates.$it.ItemStack.glowing") == true) {
+                                addEnchant(Enchantment.DURABILITY, 1, true)
+                                addItemFlags(ItemFlag.HIDE_ENCHANTS)
+                            }
+                        }
+                    }
+
+                    onClick { _ ->
+                        sender.openFrame(duration(sender, targetUUID, punishmentType, pluginType, it.toString())!!)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun duration(sender: Player, targetUUID: UUID, punishmentType: PunishmentType, pluginType: PluginType, template: String): InvFrame? {
+        when (pluginType) {
+            PluginType.VANILLA -> {
+                punishment(sender, targetUUID, punishmentType, pluginType, template, null)
+            }
+
             PluginType.LITEBANS -> {
-                when(punishmentType) {
+                if (punishmentType == PunishmentType.BAN || punishmentType == PunishmentType.MUTE) {
+                    val dateKeys = Main.template?.getConfigurationSection("durations")?.getKeys(false)?.toList()
+
+                    return frame((dateKeys?.size?.div(9) ?: 0) + 1, Component.text("Select Punishment Duration")) {
+                        dateKeys?.forEachIndexed { index, it ->
+                            slot(index % 9, index / 9) {
+                                item = ItemStack(Material.PAPER).apply {
+                                    itemMeta = itemMeta.apply {
+                                        displayName(Component.text(Main.template?.getString("durations.$it.displayName").toString()
+                                            .replace("&", "§")))
+                                    }
+                                }
+
+                                onClick { _ ->
+                                    punishment(sender, targetUUID, punishmentType, pluginType, template, it.toString())
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    punishment(sender, targetUUID, punishmentType, pluginType, template, null)
+                }
+            }
+        }
+        return null
+    }
+
+    private fun punishment(sender: Player, targetUUID: UUID, punishmentType: PunishmentType, pluginType: PluginType, template: String, punishmentDuration: String?) {
+        val playerOffline = Bukkit.getOfflinePlayer(targetUUID)
+
+        val reason = Main.template?.getString("templates.$template.Reason")?.replace("&", "§")
+        val duration = if (punishmentDuration != null) Main.template?.getInt("durations.$punishmentDuration") else -1
+
+        sender.closeInventory()
+
+        when (pluginType) {
+            PluginType.LITEBANS -> {
+                when (punishmentType) {
                     PunishmentType.BAN -> TODO()
                     PunishmentType.KICK -> TODO()
                     PunishmentType.MUTE -> TODO()
                     PunishmentType.WARN -> TODO()
                 }
             }
+
             PluginType.VANILLA -> {
-                when(punishmentType) {
-                    PunishmentType.BAN -> TODO()
-                    PunishmentType.KICK -> TODO()
+                when (punishmentType) {
+                    PunishmentType.BAN -> {
+                        sender.performCommand("minecraft:ban ${playerOffline.name} $reason")
+                        sender.sendMessage(Component.text("§a${playerOffline.name}님을 서버에서 차단하였습니다."))
+                    }
+
+                    PunishmentType.KICK -> {
+                        if (playerOffline.isOnline) {
+                            sender.performCommand("minecraft:kick ${playerOffline.name} $reason")
+                            sender.sendMessage(Component.text("§a${playerOffline.name}님을 서버에서 추방하였습니다."))
+                        } else {
+                            sender.sendMessage(errorIsOfflinePlayer)
+                        }
+                    }
+
                     else -> {
-                        sender.sendMessage(Component.text("§c해당 기능은 LiteBans플러그인이 있을 때만 사용할 수 있습니다."))
-                        return null
+                        sender.sendMessage(Component.text("§c해당 기능은 'LiteBans' 플러그인이 있을 때만 사용할 수 있습니다."))
                     }
                 }
             }
         }
-        return null
+        sender.playSound(sender.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 2f)
     }
 }

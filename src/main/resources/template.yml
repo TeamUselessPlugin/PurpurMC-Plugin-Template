@@ -1,0 +1,62 @@
+# 템플릿 (공용)
+templates:
+  TERROR:
+    ItemStack:
+        Material: "TNT"
+        displayName: '&c테러'
+        lore:
+          - "&7테러를 했습니다."
+        glowing: false
+    Reason: "&c테러"
+  ABUSE:
+    ItemStack:
+      Material: "BEDROCK"
+      displayName: "&c어뷰징"
+      lore:
+        - "&7어뷰징을 했습니다."
+      glowing: true
+    Reason: "&c어뷰징"
+  HACK:
+    ItemStack:
+      Material: "BARRIER"
+      displayName: "&c핵"
+      lore:
+        - "&7핵을 사용했습니다."
+      glowing: false
+      Reason: "&c핵"
+  SPAM:
+    ItemStack:
+      Material: "BOOK"
+      displayName: '&c스팸'
+      lore:
+        - "&7채팅에서 광고를 했습니다."
+        - "&7채팅을 지속적으로 반복했습니다."
+      glowing: true
+    Reason: "&c스팸"
+
+# 지속 시간 (LiteBans 플러그인 전용) [분 단위]
+durations:
+  1Day:
+    displayName: "&e1일"
+    time: 1440
+  3Day:
+    displayName: "&e3일"
+    time: 4320
+  7Day:
+    displayName: "&e7일"
+    time: 10080
+  30Day:
+    displayName: "&e30일"
+    time: 43200
+  90Day:
+    displayName: "&e90일"
+    time: 129600
+  180Day:
+    displayName: "&e180일"
+    time: 259200
+  365Day:
+    displayName: "&e365일"
+    time: 525600
+  Permanent:
+    displayName: "&e영구"
+    time: -1

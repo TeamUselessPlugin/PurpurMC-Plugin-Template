@@ -1,7 +1,7 @@
 package io.github.teamuselessplugin.punishment.events
 
 import io.github.monun.heartbeat.coroutines.HeartbeatScope
-import io.github.teamuselessplugin.punishment.protocol.GlowPlayer
+import io.github.teamuselessplugin.punishment.packet.GlowPlayer
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.kyori.adventure.text.Component
@@ -13,9 +13,11 @@ import org.bukkit.event.player.PlayerInteractEvent
 import java.util.*
 
 class StickFinderEvent : Listener {
-    private val seeker: HashMap<UUID, Boolean> = HashMap()
-    private val coroutineEnabled: HashMap<UUID, Boolean> = HashMap()
-    private val target: HashMap<UUID, Player> = HashMap()
+    companion object {
+        val seeker: HashMap<UUID, Boolean> = HashMap()
+        val target: HashMap<UUID, Player> = HashMap()
+        val coroutineEnabled: HashMap<UUID, Boolean> = HashMap()
+    }
 
     @EventHandler
     fun interaction(e: PlayerInteractEvent) {

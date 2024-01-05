@@ -1,4 +1,4 @@
-package io.github.teamuselessplugin.punishment.protocol
+package io.github.teamuselessplugin.punishment.packet
 
 import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.ProtocolLibrary
@@ -10,6 +10,7 @@ import com.comphenix.protocol.wrappers.WrappedDataValue
 import com.comphenix.protocol.wrappers.WrappedDataWatcher
 import io.github.teamuselessplugin.punishment.Main
 import org.bukkit.entity.Player
+import org.bukkit.potion.PotionEffectType
 import kotlin.experimental.and
 
 class GlowPlayer(private var target: Player? = null) {
@@ -43,20 +44,23 @@ class GlowPlayer(private var target: Player? = null) {
         if (protocolListener != null) {
             destroy()
 
-            val packet = PacketContainer(PacketType.Play.Server.ENTITY_METADATA)
-            packet.integers.write(0, target?.entityId)
-            val serializer = WrappedDataWatcher.Registry.get(Byte::class.javaObjectType)
+            // glowing effect가 없는 경우에만 packet을 보냄
+            if (!target?.hasPotionEffect(PotionEffectType.GLOWING)!!) {
+                val packet = PacketContainer(PacketType.Play.Server.ENTITY_METADATA)
+                packet.integers.write(0, target?.entityId)
+                val serializer = WrappedDataWatcher.Registry.get(Byte::class.javaObjectType)
 
-            val value = WrappedDataValue(0, serializer, 0.toByte())
-            packet.dataValueCollectionModifier.write(0, listOf(value))
+                val value = WrappedDataValue(0, serializer, 0.toByte())
+                packet.dataValueCollectionModifier.write(0, listOf(value))
 
-            try {
-                watchers.forEach {
-                    ProtocolLibrary.getProtocolManager().sendServerPacket(it, packet)
+                try {
+                    watchers.forEach {
+                        ProtocolLibrary.getProtocolManager().sendServerPacket(it, packet)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    return false
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                return false
             }
             return true
         }
@@ -84,13 +88,15 @@ class GlowPlayer(private var target: Player? = null) {
                 .listenerPriority(ListenerPriority.NORMAL)
         ) {
             override fun onPacketSending(event: PacketEvent) {
-                // sender에게만 args[0]의 glow를 활성화
+                // watcher가 아닌 경우에는 packet을 보내지 않음
                 val packet = event.packet.deepClone()
+                var indexZero = 0
 
                 if (watchers.contains(event.player) && event.packet.integers.read(0) == target?.entityId) {
                     val values = mutableListOf<WrappedDataValue>()
                     packet.dataValueCollectionModifier.read(0).forEach {
                         if (it.index == 0 && (it.value as Byte).and(0x40.toByte()) == 0x00.toByte()) {
+                            indexZero++
                             values.add(WrappedDataValue(
                                 0,
                                 WrappedDataWatcher.Registry.get(Byte::class.javaObjectType),
@@ -98,6 +104,14 @@ class GlowPlayer(private var target: Player? = null) {
                             ))
                         } else {
                             values.add(it)
+                        }
+
+                        if (it.index == 17 && indexZero == 0) {
+                            values.add(WrappedDataValue(
+                                0,
+                                WrappedDataWatcher.Registry.get(Byte::class.javaObjectType),
+                                0x40.toByte()
+                            ))
                         }
                         packet.dataValueCollectionModifier.write(0, values)
 
