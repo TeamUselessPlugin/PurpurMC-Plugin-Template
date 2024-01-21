@@ -50,6 +50,17 @@ dependencies {
      * And Add this to your plugin.yml (libraries)
      * - io.github.monun:invfx-core:<latest_version>
      */
+    /**
+     * compileOnly("io.github.classgraph", "classgraph", "<latest_version>") // ClassGraph : MIT License
+     * Please Add this to your README.md if you use this library
+     *
+     * > N. ClassGraph - `MIT License`
+     * >    * https://github.com/classgraph/classgraph
+     * >    * https://github.com/classgraph/classgraph/blob/latest/LICENSE-ClassGraph.txt
+     *
+     * And Add this to your plugin.yml (libraries)
+     * - io.github.classgraph:classgraph:<latest_version>
+     */
 
     implementation(fileTree(mapOf("dir" to "libs/implementation", "include" to listOf("*.jar")))) // Load all jars in libs folder (Local Libraries)
 }
